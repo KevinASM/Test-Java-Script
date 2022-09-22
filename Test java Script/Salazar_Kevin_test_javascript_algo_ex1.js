@@ -1,0 +1,111 @@
+count=0
+for (var i=0;i<9;i++){
+    count=9*i;
+    document.getElementsByClassName("box")[i].innerHTML="<div class='cell'><input type='text' id='"+(count+1)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+2)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+3)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+4)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+5)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+6)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+7)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+8)
+	+"' class='input'></div><div class='cell'><input type='text' id='"+(count+9)
+	+"' class='input'></div>"
+}
+
+
+var level;
+var choosen;
+
+
+// array_number1_level board create
+
+var array_number = new Array(9);
+array_number[0]= "4 2 7 3 5 1 9 8 6";
+array_number[1]= "9 8 3 7 6 2 5 1 4";
+array_number[2]= "1 5 6 8 9 4 7 2 3";
+array_number[3]= "2 3 9 1 8 5 4 6 7";
+array_number[4]= "7 4 1 6 3 9 2 5 8";
+array_number[5]= "5 6 8 2 4 7 1 3 9";
+array_number[6]= "8 7 2 9 1 3 6 4 5";
+array_number[7]= "3 9 5 4 2 6 8 7 1";
+array_number[8]= "6 1 4 5 7 8 3 9 6";
+
+array_number=['4-7---9--98---2----5-8-47----9---4677-------5856---7----87-9-3----9---68--6---7-8'];
+
+array_number1=['427351986983762514156894723239185467741639258568247139872913645395426871614578396'];
+
+
+function start(){
+	
+    for(var i=0;i<6;i++){
+        document.getElementsByClassName("label")[i].setAttribute("onclick","return false;");
+    }
+	
+    if(document.getElementById("array_number1").checked){
+        level='array_number1';
+        var random=Math.floor(Math.random()*9);
+        choosen=random;
+        for(var i=0;i<81;i++){
+            if(array_number[random][i]!='-'){
+                document.getElementById((i+1).toString()).value=array_number[random][i];
+                document.getElementById((i+1).toString()).readOnly=true;
+            }
+        }
+    }
+
+document.getElementById("start").removeAttribute("onclick");
+   
+}
+
+
+//check answer
+var id=setInterval(() => {
+    if(document.activeElement.className=="input"){
+        if((document.getElementById(document.activeElement.id).value==array_number1[choosen][document.activeElement.id-1])||(document.getElementById(document.activeElement.id).value=='')){
+            for(var i=0;i<81;i++){
+                if(i==80 && document.getElementById((81).toString()).value!='' ){
+                        alert("you win");
+                        clearInterval(id);
+                        window.location.reload();
+                }
+                else if(document.getElementById((i+1).toString()).value==''){
+                    break;
+                }
+            }
+        }
+        else{
+            if(document.getElementById("rem_live").innerHTML==1){
+                document.getElementById("rem_live").innerHTML==0;
+                alert("you lost !!");
+                document.activeElement.value='';
+                window.location.reload();
+
+            }
+            else{
+            document.getElementById("rem_live").innerHTML=document.getElementById("rem_live").innerHTML-1;
+            document.activeElement.value='';
+            }
+        }
+    }
+
+}, 500);
+
+
+
+//answer
+function answer(){
+        for(var i=0;i<81;i++){
+            document.getElementById((i+1).toString()).value=array_number1[choosen][i];
+        }
+}
+
+
+//new game
+
+function replay(){
+    for(var i=0;i<81;i++){
+        document.getElementById((i+1).toString()).value='';
+    }
+    start();
+}
